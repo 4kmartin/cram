@@ -43,7 +43,6 @@ fn initialize_directory() -> std::io::Result<()> {
 }
 
 fn create_symlink(target: &Path, link: &Path) -> std::io::Result<()> {
-    println!("linking <{}> to <{}>", link.display(), target.display());
     #[cfg(windows)]
     if target.is_dir() {
         return std::os::windows::fs::symlink_dir(target, link);

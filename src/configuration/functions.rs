@@ -46,11 +46,6 @@ fn build_target_map(config: &Config, paths: &FileList) -> std::io::Result<Target
 
 fn custom_mapping(tm: &mut TargetMap, config_file: &Path, target: &str) -> std::io::Result<()> {
     let tp: Box<Path> = resolve_path(target)?;
-    println!(
-        "--- Cutom Mapping ---\nold path: {}\nresolved:{}",
-        target,
-        tp.display()
-    );
     tm.insert(config_file.to_path_buf().into_boxed_path(), tp);
     Ok(())
 }

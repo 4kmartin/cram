@@ -18,7 +18,6 @@ struct ConfigFile {
 pub(crate) fn load_config() -> Config {
     if let Ok(contents) = std::fs::read_to_string("cram.toml") {
         let config: Config = toml::from_str(&contents).expect("Failed to parse cram.toml");
-        println!("{:#?}", config);
         return config;
     } else {
         return Config::default();

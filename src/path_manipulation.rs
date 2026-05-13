@@ -19,28 +19,25 @@ pub(crate) fn build_link(config_file: &Path) -> std::io::Result<Box<Path>> {
 }
 
 pub(crate) fn resolve_path(path: &str) -> std::io::Result<Box<Path>> {
-    println!("--- resolve path ---");
     if path.starts_with("~") {
-        println!("starts with ~");
         let b = path
             .replace("~", "")
             .replacen("/", "", 1)
             .replacen("\\", "", 1);
         let a = Path::new(&b);
-        println!("less ~ : {}", a.display());
         std::env::home_dir()
             .and_then(|x| {
-                println!("home: {}", x.display());
                 let y = Some(x.join(a).into_boxed_path());
-                println!("joined path {:#?}", &y);
                 y
             })
             .ok_or(build_io_error(
                 "Failed to get home directory. Is this a valid session?",
             ))
     } else if path.starts_with(".") {
-        println!("starts with . ");
-        let b = path.replacen(".", "", 1);
+        let b = path
+            .replacen(".", "", 1)
+            .replacen("/", "", 1)
+            .replacen("\\", "", 1);
         let a = Path::new(&b);
         std::env::current_dir().and_then(|x| Ok(x.join(a).into_boxed_path()))
     } else {

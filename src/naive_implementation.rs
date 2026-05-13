@@ -1,7 +1,5 @@
 use crate::{
-    FileList, create_symlink,
-    error_handling::{build_io_error, handle_io_error},
-    path_manipulation::build_link,
+    FileList, create_symlink, error_handling::handle_io_error, path_manipulation::build_link,
 };
 
 pub(crate) fn make_symlinks(paths: FileList) -> std::io::Result<()> {
