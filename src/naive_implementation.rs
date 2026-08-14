@@ -1,5 +1,5 @@
 use crate::{
-    FileList, create_symlink, error_handling::handle_io_error, path_manipulation::build_link,
+    FileList, create_symlink, error_handling::print_io_error, path_manipulation::build_link,
 };
 
 pub(crate) fn make_symlinks(paths: FileList) -> std::io::Result<()> {
@@ -11,7 +11,7 @@ pub(crate) fn make_symlinks(paths: FileList) -> std::io::Result<()> {
         match create_symlink(target.as_path(), &link) {
             Ok(_) => (),
             Err(err) => {
-                handle_io_error(&err);
+                print_io_error(&err);
                 if err.kind() != std::io::ErrorKind::AlreadyExists {
                     return Err(err);
                 }

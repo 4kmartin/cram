@@ -42,6 +42,7 @@ fn initialize_directory() -> std::io::Result<()> {
     Ok(())
 }
 
+#[allow(clippy::needless_return)]
 fn create_symlink(target: &Path, link: &Path) -> std::io::Result<()> {
     #[cfg(windows)]
     if target.is_dir() {

@@ -1,4 +1,4 @@
-pub(crate) fn handle_io_error(err: &std::io::Error) {
+pub(crate) fn print_io_error(err: &std::io::Error) {
     println!("{}", err);
 }
 

@@ -1,5 +1,5 @@
 use crate::configuration::{Config, load_config};
-use crate::error_handling::{build_io_error, handle_io_error};
+use crate::error_handling::{build_io_error, print_io_error};
 use crate::path_manipulation::{build_link, get_path_relative_to_cwd, resolve_path};
 use crate::{FileList, create_symlink, naive_implementation};
 use std::collections::HashMap;
@@ -10,6 +10,7 @@ type TargetMap = HashMap<Box<Path>, Box<Path>>;
 pub(crate) fn make_symlinks(paths: FileList) -> std::io::Result<()> {
     let config = load_config();
     if config.is_empty() {
+        #[allow(clippy::needless_return)]
         return naive_implementation::make_symlinks(paths);
     } else {
         let target_map = build_target_map(&config, &paths)?;
@@ -17,14 +18,14 @@ pub(crate) fn make_symlinks(paths: FileList) -> std::io::Result<()> {
             match create_symlink(&target, &link) {
                 Ok(_) => (),
                 Err(err) => {
-                    handle_io_error(&err);
+                    print_io_error(&err);
                     if err.kind() != std::io::ErrorKind::AlreadyExists {
                         return Err(err);
                     }
                 }
             }
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -41,7 +42,7 @@ fn build_target_map(config: &Config, paths: &FileList) -> std::io::Result<Target
             None => default_mapping(&mut target_map, path)?,
         };
     }
-    return Ok(target_map);
+    Ok(target_map)
 }
 
 fn custom_mapping(tm: &mut TargetMap, config_file: &Path, target: &str) -> std::io::Result<()> {
